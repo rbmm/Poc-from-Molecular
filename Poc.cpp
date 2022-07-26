@@ -97,7 +97,7 @@ void CALLBACK ep(void*)
 			}
 		}
 
-		delete [] psz;
+		LocalFree(psz);
 	}
 
 	ExitProcess(0);
