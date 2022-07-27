@@ -6,9 +6,7 @@
 #define _NO_CRT_STDIO_INLINE
 #define _CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES 0
 
-//#include <stdlib.h>
 #include <stdio.h>
-//#include <string.h>
 #include <windows.h>
 
 EXTERN_C_START
@@ -62,6 +60,8 @@ void CALLBACK ep(void*)
 
 					if (mbi.State == MEM_FREE)
 					{
+						if (!mbi.BaseAddress) ((PBYTE&)mbi.BaseAddress)++, --mbi.RegionSize;
+
 						if (SIZE_T dwSize = mbi.RegionSize & b)
 						{
 							AllocCount++;
@@ -82,7 +82,7 @@ void CALLBACK ep(void*)
 
 				swprintf_s(psz, MAXSHORT + 1, L"q=%u a=%u", QueryCount, AllocCount);
 
-				if (MessageBox(0, psz, L"Do Hang ?", MB_ICONWARNING|MB_YESNO) == IDYES)
+				if (MessageBox(0, psz, L"Do Hang(infinite loop) ?", MB_ICONWARNING|MB_YESNO) == IDYES)
 				{
 					LONG status = VirtualAllocEx(pi.hProcess, 0, a + 1, MEM_RESERVE, PAGE_NOACCESS) ? 0 : RtlGetLastNtStatus();
 
